@@ -19,6 +19,6 @@ jobs:
     steps:
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_ARN }}
-      - run: aws s3 ls ${{ env.S3_BUCKET }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
+      - run: aws s3 ls ${{ vars.S3_BUCKET }}
