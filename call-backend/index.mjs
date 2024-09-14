@@ -11,7 +11,7 @@ const FUNCTIONS = [
 
 // パラメータストアから情報取得
 const client = new SSMClient({region: "ap-northeast-1"});
-const paramsURL = {
+const paramsDomain = {
   Name: "garland_backend_url",
   WithDecryption: true
 }
@@ -19,8 +19,8 @@ const paramsSalt = {
   Name: "wanderers_info_backend_token",
   WithDecryption: true
 }
-const commandGetURL = new GetParameterCommand(paramsURL);
-const URL = (await client.send(commandGetURL)).Parameter.Value;
+const commandGetDomain = new GetParameterCommand(paramsDomain);
+const Domain = (await client.send(commandGetDomain)).Parameter.Value;
 
 const commandGetSalt = new GetParameterCommand(paramsSalt);
 const Salt = (await client.send(commandGetSalt)).Parameter.Value;
@@ -35,20 +35,33 @@ const authorizationToken = createHash('sha256')
                             .update(tokenPlaintext)
                             .digest('hex');
 
+// ハンドラ
+
 export async function handler(event) {
   const path = JSON.parse(JSON.stringify(event))["function"];
   if (!FUNCTIONS.includes(path)) {
     return `ERROR! invalid functions: ${path}`;
   }
 
+  const URL = `${Domain}${path}`
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': authorizationToken
   }
+  const body = { "Timestamp": unixTimestamp }
+
+  console.log(JSON.stringify({
+    "request": {
+      "URL": URL,
+      "headers": headers,
+      "method": "post",
+      "body": body
+    }
+  }));
 
   const res = await axios.post(
-                      `${URL}${path}`,
-                      { "Timestamp": unixTimestamp },
+                      URL,
+                      body,
                       { headers: headers}
                     ).then((response) => {
                       console.log("status: ", response.status);
