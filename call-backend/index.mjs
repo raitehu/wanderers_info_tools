@@ -2,6 +2,13 @@ import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
 import { createHash } from 'crypto';
 import axios from "axios";
 
+// 受取可能なfunction一覧
+const FUNCTIONS = [
+  "/v1/garland/update-notify/",
+  "/v1/garland/soon-expiry/",
+  "/v1/garland/daily/"
+]
+
 // パラメータストアから情報取得
 const client = new SSMClient({region: "ap-northeast-1"});
 const paramsURL = {
@@ -40,6 +47,11 @@ const authorizationToken = createHash('sha256')
 // })
 
 export async function handler(event) {
-  console.log(JSON.stringify(event));
-  return JSON.stringify(event);
+  const path = JSON.parse(event).function;
+  if (!FUNCTIONS.includes(path)) {
+    return `ERROR! invalid functions: ${path}`;
+  }
+
+  console.log(path);
+  return path;
 }
