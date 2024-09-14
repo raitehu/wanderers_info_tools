@@ -7,5 +7,3 @@ export async function handler() {
   console.log(res.data);
   return res.data;
 }
-
-// https://wanderers-info-backend.herokuapp.com/v1/healthcheck

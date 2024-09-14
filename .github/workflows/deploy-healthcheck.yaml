@@ -1,0 +1,22 @@
+name: deploy-healthcheck
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+    paths:
+      - healthcheck/**
+jobs:
+  s3ls:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: "ap-northeast-1"
+          role-to-assume: "arn:aws:iam::559300055890:role/deploy-wanderers-info-tools"
+      - run: aws s3 ls s3://wanderers-info-tools
