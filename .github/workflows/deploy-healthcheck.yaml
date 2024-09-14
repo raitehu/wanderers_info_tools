@@ -9,7 +9,7 @@ on:
     paths:
       - healthcheck/**
 jobs:
-  s3ls:
+  deploy:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -17,8 +17,22 @@ jobs:
     environment:
       name: production
     steps:
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
-      - run: aws s3 ls ${{ vars.S3_BUCKET }}
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - run: node --version # DEBUG
+    - name: Build
+      run: |
+        cd healthcheck
+        npm install
+        zip -r lambda_function.zip .
+    - name: Configure AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
+    - name: Upload to S3
+      run: aws s3 cp lambda_function.zip ${{ vars.S3_BUCKET }}/healthcheck/lambda_function.zip
