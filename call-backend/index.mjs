@@ -11,17 +11,10 @@ const FUNCTIONS = [
 
 // パラメータストアから情報取得
 const client = new SSMClient({region: "ap-northeast-1"});
-const paramsDomain = {
-  Name: "garland_backend_url",
-  WithDecryption: true
-}
 const paramsSalt = {
   Name: "wanderers_info_backend_token",
   WithDecryption: true
 }
-const commandGetDomain = new GetParameterCommand(paramsDomain);
-const Domain = (await client.send(commandGetDomain)).Parameter.Value;
-
 const commandGetSalt = new GetParameterCommand(paramsSalt);
 const Salt = (await client.send(commandGetSalt)).Parameter.Value;
 
@@ -38,6 +31,7 @@ const authorizationToken = createHash('sha256')
 // ハンドラ
 
 export async function handler(event) {
+  const Domain = process.env.WANDERERS_INFO_BACKEND_URL;
   const path = JSON.parse(JSON.stringify(event))["function"];
   if (!FUNCTIONS.includes(path)) {
     return `ERROR! invalid functions: ${path}`;
