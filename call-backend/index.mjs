@@ -35,23 +35,27 @@ const authorizationToken = createHash('sha256')
                             .update(tokenPlaintext)
                             .digest('hex');
 
-// APIコール
-// const res = await axios.post(URL, {
-//   "function": "tidyUp"
-// }).then((response) => {
-//   console.log("status:", response.status);
-//   console.log("response:", response.data);
-//   return response.data;
-// }).catch((err) => {
-//   console.error(err);
-// })
-
 export async function handler(event) {
-  const path = JSON.parse(event).function;
+  const path = JSON.parse(JSON.stringify(event))["function"];
   if (!FUNCTIONS.includes(path)) {
     return `ERROR! invalid functions: ${path}`;
   }
 
-  console.log(path);
-  return path;
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': authorizationToken
+  }
+
+  const res = await axios.post(
+                      `${URL}${path}`,
+                      { "Timestamp": unixTimestamp },
+                      { headers: headers}
+                    ).then((response) => {
+                      console.log("status: ", response.status);
+                      console.log("response: ", response.data);
+                      return response.data;
+                    }).catch((err) => {
+                      console.error(err);
+                    });
+  return res;
 }
