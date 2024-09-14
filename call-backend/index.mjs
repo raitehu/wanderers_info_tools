@@ -29,15 +29,15 @@ const authorizationToken = createHash('sha256')
                             .digest('hex');
 
 // APIコール
-const res = await axios.post(URL, {
-  "function": "tidyUp"
-}).then((response) => {
-  console.log("status:", response.status);
-  console.log("response:", response.data);
-  return response.data;
-}).catch((err) => {
-  console.error(err);
-})
+// const res = await axios.post(URL, {
+//   "function": "tidyUp"
+// }).then((response) => {
+//   console.log("status:", response.status);
+//   console.log("response:", response.data);
+//   return response.data;
+// }).catch((err) => {
+//   console.error(err);
+// })
 
 export async function handler(event) {
   return JSON.stringify(event);
