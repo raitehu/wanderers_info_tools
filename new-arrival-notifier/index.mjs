@@ -1,22 +1,13 @@
-exports.handler = (event, context, callback) => {
-
+export async function handler(event) {
+  console.log("invoked");
   event.Records.forEach((record) => {
-      console.log('イベント種別:', record.eventName);
-      console.log('DynamoDB Record: %j', record.dynamodb);
+    console.log('イベント種別:', record.eventName);
+    console.log('DynamoDB Record: %j', record.dynamodb);
 
-      if(record.eventName == 'INSERT'){
-          //項目が追加された時の処理
-          const newItem = record.dynamodb.NewImage;
-
-      }else if(record.eventName == 'MODIFY'){
-          //項目が変更された時の処理
-          const newItem = record.dynamodb.NewImage;//変更後
-
-      }else if(record.eventName == 'REMOVE'){
-          //項目が削除された時の処理
-      }else{
-
-      }
-  });
-
-};
+    if (record.eventName === "INSERT") {
+      console.log(record.dynamodb.NewImage);
+    } else {
+      console.log("other events");
+    }
+  })
+}
