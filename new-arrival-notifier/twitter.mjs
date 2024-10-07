@@ -1,4 +1,4 @@
-import Twitter from "twitter-api-v2";
+import { TwitterApi } from "twitter-api-v2";
 
   // const env = process.env.ENV // TODO 本番のアカウントに投げないようにハードコーディングしておく
   const env = "stg"
@@ -8,7 +8,7 @@ import Twitter from "twitter-api-v2";
     appKey:       `name=%2F${env}%2Ftwitter%2Fapi_key&withDecryption=true`,
     appSecret:    `name=%2F${env}%2Ftwitter%2Fapi_key_secret&withDecryption=true`,
     accessToken:  `name=%2F${env}%2Ftwitter%2Faccess_token&withDecryption=true`,
-    AccessSecret: `name=%2F${env}%2Ftwitter%2Faccess_token_secret&withDecryption=true`
+    accessSecret: `name=%2F${env}%2Ftwitter%2Faccess_token_secret&withDecryption=true`
   }
   const headers = {
     "X-Aws-Parameters-Secrets-Token": process.env.AWS_SESSION_TOKEN
@@ -20,7 +20,7 @@ export class TwitterService {
     appKey: "",
     appSecret: "",
     accessToken: "",
-    AccessSecret: ""
+    accessSecret: ""
   }
 
   async config() {
@@ -46,16 +46,16 @@ export class TwitterService {
       console.error(err);
     }
     try {
-      const response = await fetch(`${endpoint}${path}?${queryString.AccessSecret}`, { headers: headers });
+      const response = await fetch(`${endpoint}${path}?${queryString.accessSecret}`, { headers: headers });
       const json = await response.json();
-      this.twitterSecrets.AccessSecret = json["Parameter"]["Value"];
+      this.twitterSecrets.accessSecret = json["Parameter"]["Value"];
     } catch (err) {
       console.error(err);
     }
   }
 
   async execute(messages) {
-    const client = new Twitter(this.twitterSecrets);
+    const client = new TwitterApi(this.twitterSecrets);
     await client.v2.tweetThread(messages).catch((err) => console.error(err));
   }
 }

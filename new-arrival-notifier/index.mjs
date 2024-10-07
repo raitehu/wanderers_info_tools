@@ -14,10 +14,12 @@ export async function handler(event) {
   })
 
   const twitter = new TwitterService();
-
-  await Promise.all(tweetData.map(async (tweetDatum) => {
-    return twitter.execute([buildMessage(tweetDatum)]).promise();
-  }))
+  if (tweetData.length != 0) {
+    console.log("Parameter StoreからTwitter接続情報を取得します...");
+    await twitter.config();
+    console.log("Tweetをします...", tweetData[0]);
+    await twitter.execute([buildMessage(tweetData[0])]);
+  }
 }
 
 function buildMessage(tweetDatum) {
