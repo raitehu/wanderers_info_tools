@@ -1,18 +1,8 @@
-export async function handler(event) {
-  const endpoint = "http://localhost:2773";
-  const path = "/systemsmanager/parameters/get/";
-  const query = "name=%2Fprd%2Ftwitter%2Faccess_token&withDecryption=true";
+import { TwitterService } from "./twitter.mjs";
 
-  const response = await fetch(
-    `${endpoint}${path}?${query}`,
-    {
-      headers: {
-        "X-Aws-Parameters-Secrets-Token": process.env.AWS_SESSION_TOKEN
-      }
-    }
-  );
-  const json = await response.json();
-  console.log(json["Parameter"]["Value"]);
+export async function handler(event) {
+  const twitter = new TwitterService();
+  twitter.execute(["test message from AWS Lambda"]);
 
   // console.log("invoked");
   // event.Records.forEach((record) => {
