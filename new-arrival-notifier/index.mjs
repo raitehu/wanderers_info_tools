@@ -1,19 +1,38 @@
 import { TwitterService } from "./twitter.mjs";
+import { DateTime } from "luxon";
 
 export async function handler(event) {
+  let tweetData = [];
+  event.Records.forEach((record) => {
+    if (record.eventName !== "INSERT") {
+      return;
+    }
+    tweetData.push({
+      ExpireDate: record.dynamodb.NewImage.ExpireDate.S,
+      TweetURL:   record.dynamodb.NewImage.TweetURL.S
+    })
+  })
+
   const twitter = new TwitterService();
-  twitter.execute(["test message from AWS Lambda"]);
 
-  // console.log("invoked");
-  // event.Records.forEach((record) => {
+  await Promise.all(tweetData.map(async (tweetDatum) => {
+    return twitter.execute([buildMessage(tweetDatum)]).promise();
+  }))
+}
 
-    // console.log('イベント種別:', record.eventName);
-    // console.log('DynamoDB Record: %j', record.dynamodb);
-
-    // if (record.eventName === "INSERT") {
-    //   console.log(record.dynamodb.NewImage);
-    // } else {
-    //   console.log("other events");
-    // }
-  // })
+function buildMessage(tweetDatum) {
+  const expireDateString = DateTime.fromISO(tweetDatum.ExpireDate, { zone: "Asia/Tokyo"})
+                                   .toFormat('yyyy/M/d H時頃まで');
+  const postTime = `posted at ${DateTime.local().toMillis()}`;
+  return [
+    '🎪GARLANDからのお知らせ🎪',
+    'ネップリが新規登録されました!!',
+    `プリント期限: ${expireDateString}`,
+    tweetDatum.TweetURL,
+    '',
+    'その他のネップリの一覧および新規登録はこちらから↓',
+    process.env.GARLAND_URL,
+    '',
+    postTime,
+  ].join('\n');
 }
