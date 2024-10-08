@@ -36,7 +36,7 @@ export async function handler() {
     }));
   });
   // ツイート！
-  await twitter.execute(message).catch((err) => {
+  await twitter.execute([message]).catch((err) => {
     console.error(JSON.stringify({
       level: "ERROR",
       message: "[Twitter] Executeでエラーが発生しました",
