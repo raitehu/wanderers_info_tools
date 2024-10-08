@@ -5,20 +5,43 @@ export async function handler(event) {
   let tweetData = [];
   event.Records.forEach((record) => {
     if (record.eventName !== "INSERT") {
+      console.log(JSON.stringify({
+        level: "INFO",
+        message: "[DynamoDB Stream] 処理対象外です",
+        body: record.eventName
+      }));
       return;
     }
-    tweetData.push({
+    const tweetDatum = {
       ExpireDate: record.dynamodb.NewImage.ExpireDate.S,
       TweetURL:   record.dynamodb.NewImage.TweetURL.S
-    })
+    }
+    console.log(JSON.stringify({
+      level: "INFO",
+      message: "[DynamoDB Stream] 処理対象です",
+      body: tweetDatum
+    }));
+    tweetData.push(tweetDatum);
   })
 
+  // Twitterのconfig
   const twitter = new TwitterService();
   if (tweetData.length != 0) {
-    console.log("Parameter StoreからTwitter接続情報を取得します...");
-    await twitter.config();
-    console.log("Tweetをします...", tweetData[0]);
-    await twitter.execute([buildMessage(tweetData[0])]);
+    await twitter.config().catch((err) => {
+      console.error(JSON.stringify({
+        level: "ERROR",
+        message: "[Twitter] Configでエラーが発生しました",
+        body: err
+      }));
+    });
+    // ツイート！
+    await twitter.execute([buildMessage(tweetData[0])]).catch((err) => {
+      console.error(JSON.stringify({
+        level: "ERROR",
+        message: "[Twitter] Executeでエラーが発生しました",
+        body: err
+      }));
+    });
   }
 }
 

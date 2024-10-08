@@ -1,4 +1,4 @@
-name: deploy-clean-up
+name: deploy-report-notifier
 on:
   workflow_dispatch:
   pull_request:
@@ -7,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - clean-up/**
+      - report-notifier/**
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -26,7 +26,7 @@ jobs:
     - run: node --version # DEBUG
     - name: Build
       run: |
-        cd clean-up
+        cd report-notifier
         npm install
         zip -r lambda_function.zip .
     - name: Configure AWS
@@ -35,4 +35,4 @@ jobs:
         aws-region: ${{ vars.AWS_REGION }}
         role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
     - name: Upload to S3
-      run: aws s3 cp clean-up/lambda_function.zip ${{ vars.S3_BUCKET }}/garland-clean-up/lambda_function.zip
+      run: aws s3 cp report-notifier/lambda_function.zip ${{ vars.S3_BUCKET }}/garland-report-notifier/lambda_function.zip
