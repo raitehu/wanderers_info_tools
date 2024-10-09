@@ -34,6 +34,8 @@ export async function handler() {
     return expiredMessage(item.TweetURL);
   });
 
+  if (targetItems.length === 0) { return; }
+
   // Twitterのconfig
   const twitter = new TwitterService();
   await twitter.config().catch((err) => {
@@ -61,5 +63,11 @@ function filter(items) {
                                 .set({ minute: 0 })
                                 .plus({ hours: 12})
                                 .toMillis()/1000;
+  console.log(JSON.stringify({
+    level: "INFO",
+    message: "[APP] 基準となるUnixTimeを決定しました",
+    body: referenceTime
+  }));
+
   return items.filter((item) => item.UnixTime === referenceTime);
 }
