@@ -8,7 +8,8 @@ export async function handler(event) {
       console.log(JSON.stringify({
         level: "INFO",
         message: "[DynamoDB Stream] 処理対象外です",
-        body: record.eventName
+        body: record.eventName,
+        timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
       }));
       return;
     }
@@ -19,7 +20,8 @@ export async function handler(event) {
     console.log(JSON.stringify({
       level: "INFO",
       message: "[DynamoDB Stream] 処理対象です",
-      body: tweetDatum
+      body: tweetDatum,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
     tweetData.push(tweetDatum);
   })
@@ -31,7 +33,8 @@ export async function handler(event) {
       console.error(JSON.stringify({
         level: "ERROR",
         message: "[Twitter] Configでエラーが発生しました",
-        body: err
+        body: err,
+        timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
       }));
     });
     // ツイート！
@@ -39,7 +42,8 @@ export async function handler(event) {
       console.error(JSON.stringify({
         level: "ERROR",
         message: "[Twitter] Executeでエラーが発生しました",
-        body: err
+        body: err,
+        timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
       }));
     });
   }

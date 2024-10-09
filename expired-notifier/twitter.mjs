@@ -1,4 +1,5 @@
 import { TwitterApi } from "twitter-api-v2";
+import { DateTime } from "luxon";
 
   // const env = process.env.ENV // TODO 本番のアカウントに投げないようにハードコーディングしておく
   const env      = "stg"
@@ -27,7 +28,8 @@ export class TwitterService {
     console.log(JSON.stringify({
       level: "INFO",
       message: "[Twitter] Configします",
-      body: ""
+      body: "",
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
 
     // appKey
@@ -63,7 +65,8 @@ export class TwitterService {
     console.log(JSON.stringify({
       level: "INFO",
       message: "[Twitter] Executeします",
-      body: messages
+      body: messages,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
 
     const client = new TwitterApi(this.twitterSecrets);

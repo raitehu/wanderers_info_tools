@@ -1,5 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { ScanCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { DateTime } from "luxon";
 
 const env      = process.env.ENV
 const endpoint = "http://localhost:2773";
@@ -31,7 +32,8 @@ export class DynamoDBService {
     console.log(JSON.stringify({
       level: "INFO",
       message: "[DynamoDB] Configします",
-      body: ""
+      body: "",
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
 
     // accessKeyId
@@ -57,7 +59,8 @@ export class DynamoDBService {
     console.log(JSON.stringify({
       level: "INFO",
       message: "[DynamoDB] データを取得します",
-      body: command
+      body: command,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
 
     const response = await this.docClient
@@ -66,7 +69,8 @@ export class DynamoDBService {
         console.log(JSON.stringify({
           level: "INFO",
           message: "[DynamoDB] データを取得しました",
-          body: res
+          body: res,
+          timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
         }));
         return res;
       })

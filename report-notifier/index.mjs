@@ -1,6 +1,7 @@
 import { DynamoDBService } from "./dynamodb.mjs";
 import { noItemsMessage, someItemsMessage } from "./message.mjs";
 import { TwitterService } from "./twitter.mjs";
+import { DateTime } from "luxon";
 
 export async function handler() {
   // DynamoDBのconfig
@@ -9,7 +10,8 @@ export async function handler() {
     console.error(JSON.stringify({
       level: "ERROR",
       message: "[DynamoDB] Configでエラーが発生しました",
-      body: err
+      body: err,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
   });
   // DynamoDBのScan
@@ -17,7 +19,8 @@ export async function handler() {
     console.error(JSON.stringify({
       level: "ERROR",
       message: "[DynamoDB] Scanでエラーが発生しました",
-      body: err
+      body: err,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
   });
 
@@ -32,7 +35,8 @@ export async function handler() {
     console.error(JSON.stringify({
       level: "ERROR",
       message: "[Twitter] Configでエラーが発生しました",
-      body: err
+      body: err,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
   });
   // ツイート！
@@ -40,7 +44,8 @@ export async function handler() {
     console.error(JSON.stringify({
       level: "ERROR",
       message: "[Twitter] Executeでエラーが発生しました",
-      body: err
+      body: err,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
   });
 }
