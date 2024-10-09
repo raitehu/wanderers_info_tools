@@ -10,7 +10,8 @@ export async function handler() {
     console.error(JSON.stringify({
       level: "ERROR",
       message: "[DynamoDB] Configでエラーが発生しました",
-      body: err
+      body: err,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
   });
   // DynamoDBのScan
@@ -18,7 +19,8 @@ export async function handler() {
     console.error(JSON.stringify({
       level: "ERROR",
       message: "[DynamoDB] Scanでエラーが発生しました",
-      body: err
+      body: err,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
   });
 
@@ -27,7 +29,8 @@ export async function handler() {
   console.log(JSON.stringify({
     level: "INFO",
     message: "[APP] 対象ツイートを絞り込みました",
-    body: targetItems
+    body: targetItems,
+    timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
   }));
   // ツイート文の配列に変換
   const messages = targetItems.map((item) => {
@@ -42,7 +45,8 @@ export async function handler() {
     console.error(JSON.stringify({
       level: "ERROR",
       message: "[Twitter] Configでエラーが発生しました",
-      body: err
+      body: err,
+      timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
     }));
   });
   // ツイート！
@@ -51,7 +55,8 @@ export async function handler() {
       console.error(JSON.stringify({
         level: "ERROR",
         message: "[Twitter] Executeでエラーが発生しました",
-        body: err
+        body: err,
+        timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
       }));
   })}));
 }
@@ -66,7 +71,8 @@ function filter(items) {
   console.log(JSON.stringify({
     level: "INFO",
     message: "[APP] 基準となるUnixTimeを決定しました",
-    body: referenceTime
+    body: referenceTime,
+    timestamp: DateTime.local().setZone("Asia/Tokyo").toString()
   }));
 
   return items.filter((item) => item.UnixTime === referenceTime);
