@@ -60,7 +60,7 @@ function filter(items) {
   // 12時間後
   const referenceTime = DateTime.local()
                                 .setZone("Asia/Tokyo")
-                                .set({ minute: 0 })
+                                .set({ minute: 0, second: 0, millisecond: 0 })
                                 .plus({ hours: 12})
                                 .toMillis()/1000;
   console.log(JSON.stringify({
