@@ -98,5 +98,3 @@ function filterYesterday(updateList) {
     return [];
   }
 }
-
-handler();
