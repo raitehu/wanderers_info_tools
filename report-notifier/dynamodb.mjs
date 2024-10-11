@@ -38,16 +38,16 @@ export class DynamoDBService {
 
     // accessKeyId
     const accessKeyIdResponse = await fetch(`${endpoint}${path}?${queryString.accessKeyId}`, { headers: headers })
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     const accessKeyIdJson = await accessKeyIdResponse.json()
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     this.dynamoDBConfig.credentials.accessKeyId = accessKeyIdJson["Parameter"]["Value"];
 
     // secretAccessKey
     const secretAccessKeyResponse = await fetch(`${endpoint}${path}?${queryString.secretAccessKey}`, { headers: headers })
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     const secretAccessKeyJson = await secretAccessKeyResponse.json()
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     this.dynamoDBConfig.credentials.secretAccessKey = secretAccessKeyJson["Parameter"]["Value"];
 
     this.client    = new DynamoDBClient(this.dynamoDBConfig);
@@ -74,7 +74,7 @@ export class DynamoDBService {
         }));
         return res;
       })
-      .catch((err) => { throw new Error(err) });
+      .catch((err) => { throw err });
     return response;
   }
 }

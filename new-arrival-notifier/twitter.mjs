@@ -34,30 +34,30 @@ export class TwitterService {
 
     // appKey
     const appKeyResponse = await fetch(`${endpoint}${path}?${queryString.appKey}`, { headers: headers })
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     const appKeyJson = await appKeyResponse.json()
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     this.twitterSecrets.appKey = appKeyJson["Parameter"]["Value"];
 
     // appSecret
     const appSecretResponse = await fetch(`${endpoint}${path}?${queryString.appSecret}`, { headers: headers })
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     const appSecretJson = await appSecretResponse.json()
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     this.twitterSecrets.appSecret = appSecretJson["Parameter"]["Value"];
 
     // accessToken
     const accessTokenResponse = await fetch(`${endpoint}${path}?${queryString.accessToken}`, { headers: headers })
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     const accessTokenJson = await accessTokenResponse.json()
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     this.twitterSecrets.accessToken = accessTokenJson["Parameter"]["Value"];
 
     // accessSecret
     const accessSecretResponse = await fetch(`${endpoint}${path}?${queryString.accessSecret}`, { headers: headers })
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     const accessSecretJson = await accessSecretResponse.json()
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => { throw err; });
     this.twitterSecrets.accessSecret = accessSecretJson["Parameter"]["Value"];
   }
 
@@ -70,6 +70,6 @@ export class TwitterService {
     }));
 
     const client = new TwitterApi(this.twitterSecrets);
-    await client.v2.tweetThread(messages).catch((err) => { throw new Error(err); });
+    await client.v2.tweetThread(messages).catch((err) => { throw err; });
   }
 }
