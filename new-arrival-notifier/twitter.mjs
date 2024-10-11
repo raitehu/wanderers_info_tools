@@ -1,8 +1,7 @@
 import { TwitterApi } from "twitter-api-v2";
 import { DateTime } from "luxon";
 
-  // const env = process.env.ENV // TODO 本番のアカウントに投げないようにハードコーディングしておく
-  const env      = "stg"
+  const env = process.env.ENV
   const endpoint = "http://localhost:2773";
   const path     = "/systemsmanager/parameters/get/";
   const queryString = {
