@@ -81,11 +81,10 @@ export async function handler() {
 }
 
 function yesterdayDateStr() {
-  // const yesterday = DateTime.local()
-  //   .setZone("Asia/Tokyo")
-  //   .minus({ days: 1 })
-  //   .toFormat("yyyy-MM-dd");
-  const yesterday = "2024-08-02";
+  const yesterday = DateTime.local()
+    .setZone("Asia/Tokyo")
+    .minus({ days: 1 })
+    .toFormat("yyyy-MM-dd");
 
   return yesterday;
 }
