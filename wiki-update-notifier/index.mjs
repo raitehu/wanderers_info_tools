@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { Wiki } from "./wiki.mjs";
 import { HtmlParser } from "./html-parser.mjs";
 import { buildTweetTree } from "./message.mjs";
+import { TwitterService } from "./twitter.mjs";
 
 export async function handler() {
   // wikiから情報を取得する
